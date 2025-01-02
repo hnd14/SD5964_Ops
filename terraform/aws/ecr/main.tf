@@ -1,7 +1,7 @@
 module "frontend_ecr" {
   source = "../modules/ecr"
   name = "frontend"
-  project = "NT-devops"
+  project = "nt-devops"
   environment = "dev"
   owner = "NT-devops"
 }
@@ -9,7 +9,7 @@ module "frontend_ecr" {
 module "backend_ecr" {
   source = "../modules/ecr"
   name = "backend"
-  project = "NT-devops"
+  project = "nt-devops"
   environment = "dev"
   owner = "NT-devops"
 }
