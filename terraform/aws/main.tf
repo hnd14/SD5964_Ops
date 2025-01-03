@@ -54,12 +54,25 @@ module "jenkins-security-groups" {
   tags = module.jenkins-tags.tags
 }
 
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+  owners      = ["amazon"]  # Only AMIs owned by Amazon
+
+  # Filters for Amazon Linux 2
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
 module "jenkins-ec2" {
   source = "terraform-aws-modules/ec2-instance/aws"
+  ami = data.aws_ami.amazon_linux_2.id
   instance_type = "t2.micro"
   subnet_id = module.network.public_subnets[0]
   vpc_security_group_ids = module.jenkins-security-groups.security_group_id
   tags = module.jenkins-tags.tags
+  user_data = file("init-jenkins.sh")
 }
 
 module "eks" {
