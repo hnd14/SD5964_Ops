@@ -55,4 +55,14 @@ module "vpc_and_subnets" {
   create_igw       = var.create_igw
   instance_tenancy = var.instance_tenancy
 
+  public_dedicated_network_acl = true
+  public_inbound_acl_rules = [ { "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1", "rule_action": "allow", "rule_number": 100, "to_port": 0 },
+                               { "cidr_block": "0.0.0.0/0", "from_port": 8080, "protocol": "tcp", "rule_action": "allow", "rule_number": 101, "to_port": 8080 },
+                               { "cidr_block": "0.0.0.0/0", "from_port": 22, "protocol": "tcp", "rule_action": "allow", "rule_number": 102, "to_port": 22 }
+   ]
+  
+  public_outbound_acl_rules = [ { "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1", "rule_action": "allow", "rule_number": 100, "to_port": 0 },
+                               { "cidr_block": "0.0.0.0/0", "from_port": 1024, "protocol": "tcp", "rule_action": "allow", "rule_number": 101, "to_port": 65535 }
+   ]
+
 }

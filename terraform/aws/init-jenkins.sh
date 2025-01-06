@@ -7,12 +7,12 @@ sudo yum install -y wget curl git
 # Install Java first (required for Jenkins)
 echo "Installing Java..."
 sudo amazon-linux-extras enable corretto11  # Enable Corretto 11
-sudo yum install -y java-11-amazon-corretto
+sudo yum install -y java-17-amazon-corretto
 
 # Install Jenkins
 echo "Installing Jenkins..."
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 sudo yum upgrade -y  # Ensure Jenkins repository is up to date
 sudo yum install -y jenkins
 
@@ -27,8 +27,8 @@ sudo usermod -a -G docker jenkins
 
 # Start Jenkins service
 echo "Starting Jenkins..."
-sudo systemctl start jenkins
 sudo systemctl enable jenkins
+sudo systemctl start jenkins
 
 # Install kubectl
 echo "Installing kubectl..."

@@ -28,10 +28,10 @@ module "network" {
   name = "devops-network"
   vpc_cidr = "10.0.0.0/16"
   subnet_size = "24"
-  public_subnets_count = 2
-  private_subnets_count = 1
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  public_subnets_count = 1
+  private_subnets_count = 0
+  enable_nat_gateway = false
+  single_nat_gateway = false
   one_nat_gateway_per_az = false
   tags = module.network-tags.tags
 }
@@ -70,16 +70,19 @@ module "jenkins-ec2" {
   ami = data.aws_ami.amazon_linux_2.id
   instance_type = "t2.micro"
   subnet_id = module.network.public_subnets[0]
-  vpc_security_group_ids = module.jenkins-security-groups.security_group_id
+  vpc_security_group_ids = [module.jenkins-security-groups.security_group_id]
+  associate_public_ip_address = true
+  create_eip = true
   tags = module.jenkins-tags.tags
   user_data = file("init-jenkins.sh")
+  key_name = "NT-hoangdn-ssh"
 }
 
-module "eks" {
-  source  = "./modules/eks"
+# module "eks" {
+#   source  = "./modules/eks"
 
-  eks_cluster_name = "NT-Devops"
-  vpc_id = module.network.vpc_id
-  eks_node_groups_subnet_ids = module.network.private_subnets
-  control_plane_subnet_ids = module.network.public_subnets
-}
+#   eks_cluster_name = "NT-Devops"
+#   vpc_id = module.network.vpc_id
+#   eks_node_groups_subnet_ids = module.network.private_subnets
+#   control_plane_subnet_ids = module.network.public_subnets
+# }
